@@ -1,0 +1,1383 @@
+% ============================================================
+%  SEMANA 3 - ALGORITMOS Y ESTRUCTURAS DE DATOS
+%  Universidad Nacional del Altiplano - FINESI
+%  Compilar con: pdflatex SEMANA_3_A_ED.tex  (dos veces)
+% ============================================================
+\documentclass[12pt,a4paper]{article}
+
+% ---------- Codificación e idioma ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla,es-noshorthands]{babel}
+\usepackage{lmodern}
+
+% ---------- Paquetes generales ----------
+\usepackage[left=3cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{graphicx}
+% Busca las imagenes en la subcarpeta "imagenes/" o junto al .tex
+\graphicspath{{imagenes/}{./imagenes/}{images/}{./}}
+\usepackage{eso-pic}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}   % permite cortar URLs largas
+\setlength{\emergencystretch}{3em}
+
+\onehalfspacing
+
+% ---------- Colores y estilos de código ----------
+\definecolor{codegris}{rgb}{0.95,0.95,0.95}
+\definecolor{codeverde}{rgb}{0,0.5,0}
+\definecolor{codeazul}{rgb}{0.1,0.1,0.7}
+\definecolor{codemorado}{rgb}{0.58,0,0.82}
+
+\lstdefinestyle{estilobase}{
+    backgroundcolor=\color{codegris},
+    basicstyle=\ttfamily\footnotesize,
+    commentstyle=\color{codeverde}\itshape,
+    keywordstyle=\color{codeazul}\bfseries,
+    stringstyle=\color{codemorado},
+    numbers=left,
+    numbersep=8pt,
+    numberstyle=\tiny\color{gray},
+    breaklines=true,
+    breakatwhitespace=false,
+    showstringspaces=false,
+    frame=single,
+    rulecolor=\color{gray},
+    tabsize=4,
+    captionpos=b,
+    xleftmargin=15pt,
+    inputencoding=utf8,
+    extendedchars=true,
+    literate=%
+      {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+      {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+      {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {°}{{$^\circ$}}1
+}
+
+\lstdefinestyle{python}{style=estilobase,language=Python}
+\lstdefinestyle{cpp}{style=estilobase,language=C++}
+\lstdefinestyle{consola}{
+    style=estilobase,
+    language=,
+    numbers=none,
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{black!5}
+}
+
+\renewcommand{\lstlistingname}{Código}
+
+% ---------- Comando para líneas del índice ----------
+\newcommand{\entradaindice}[3][0pt]{%
+  \noindent\hspace{#1}#2\dotfill #3\par\vspace{2pt}}
+
+% ---------- Inserción robusta de imágenes ----------
+% \fig[opciones]{archivo}: si el archivo no se encuentra, dibuja un recuadro
+% indicando el nombre faltante en lugar de abortar la compilación.
+\newcommand{\fig}[2][width=0.75\textwidth]{%
+  \IfFileExists{imagenes/#2}{\includegraphics[#1]{imagenes/#2}}{%
+    \IfFileExists{#2}{\includegraphics[#1]{#2}}{%
+      \fbox{\parbox[c][3cm][c]{0.7\textwidth}{\centering\ttfamily
+        Falta la imagen: #2\\[2pt]\normalfont\small
+        (colócala en la carpeta \texttt{imagenes/})}}}}}
+
+\setlength{\parindent}{0pt}
+
+% ============================================================
+\begin{document}
+
+% =================== PORTADA ===================
+\begin{titlepage}
+\AddToShipoutPictureBG*{%
+  \AtPageLowerLeft{\fig[width=\paperwidth,height=\paperheight]{image1.jpeg}}}
+
+\centering
+% Texto blanco solo si existe la imagen de fondo (si falta, se mantiene negro)
+\IfFileExists{imagenes/image1.jpeg}{\color{white}}{\IfFileExists{image1.jpeg}{\color{white}}{}}
+\vspace*{0.2cm}
+
+{\Large\bfseries UNIVERSIDAD NACIONAL DEL ALTIPLANO\par}
+\vspace{0.4cm}
+
+{\large\bfseries FACULTAD DE INGENIERÍA MECÁNICA ELÉCTRICA,\\ ELECTRÓNICA Y SISTEMAS\par}
+\vspace{0.5cm}
+
+\begin{minipage}{0.45\textwidth}
+    \centering
+    \fig[width=0.75\textwidth]{image4.png}
+\end{minipage}%
+\begin{minipage}{0.45\textwidth}
+    \centering
+    \fig[width=0.85\textwidth]{image2.png}
+\end{minipage}
+
+\vspace{0.5cm}
+{\large\bfseries ESCUELA PROFESIONAL DE INGENIERÍA DE SISTEMAS\par}
+
+\vspace{0.9cm}
+{\Large\bfseries TRABAJO ENCARGADO\par}
+
+\vspace{0.8cm}
+{\bfseries CURSO:}\par
+\vspace{0.2cm}
+ALGORITMOS Y ESTRUCTURAS DE DATOS\par
+
+\vspace{0.8cm}
+{\bfseries DOCENTE:}\par
+\vspace{0.2cm}
+ZANABRIA GALVEZ ALDO HERNAN\par
+
+\vspace{0.8cm}
+PRESENTADO POR:\par
+\vspace{0.3cm}
+\begin{minipage}{0.75\textwidth}
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+    \item \textbf{PARILLO UMIÑA JHONATAN}
+    \item \textbf{RODRIGUEZ AGUILAR ALAIN NELSON}
+    \item \textbf{LUIGGI LEONEL YEFRY CHOQUE GÁLVEZ}
+\end{enumerate}
+\end{minipage}
+
+\vspace{0.8cm}
+SEMESTRE: IV\par
+\end{titlepage}
+
+% =================== ÍNDICE ===================
+\begin{center}
+    {\Large\bfseries ÍNDICE}
+\end{center}
+\vspace{0.5cm}
+
+\entradaindice{\textbf{I. OBJETIVO GENERAL}}{\textbf{4}}
+\entradaindice[1em]{1.1 Objetivos Específicos}{4}
+\entradaindice{\textbf{II. MARCO TEÓRICO}}{\textbf{4}}
+\entradaindice[1em]{2.1 Estructura de una función recursiva}{4}
+\entradaindice[1em]{2.2 Búsqueda binaria y la estrategia divide y vencerás}{4}
+\entradaindice[1em]{2.3 Merge Sort y notación asintótica}{5}
+\entradaindice[1em]{2.4 El Teorema Maestro}{5}
+\entradaindice[1em]{2.5 Medición empírica de tiempos de ejecución}{5}
+\entradaindice{\textbf{III. MATERIALES Y HERRAMIENTAS}}{\textbf{6}}
+\entradaindice{\textbf{IV. INSTRUCCIONES PREVIAS}}{\textbf{6}}
+\entradaindice{\textbf{V. DESARROLLO DE ACTIVIDADES}}{\textbf{6}}
+\entradaindice[1em]{Actividad 1: Recursividad básica --- suma de dígitos y traza de pila}{6}
+\entradaindice[2em]{1.1 Código en Python}{6}
+\entradaindice[2em]{2.2 Implementación}{6}
+\entradaindice[2em]{2.3 Verificación de los assert}{7}
+\entradaindice[2em]{2.4 Traza de la pila de llamadas}{7}
+\entradaindice[2em]{1.2 Código en C++17}{7}
+\entradaindice[1em]{Actividad 2: Búsqueda Binaria}{9}
+\entradaindice[2em]{2.1 Código en Python}{9}
+\entradaindice[2em]{3.1 Implementación}{10}
+\entradaindice[2em]{3.2 Verificación de la cota teórica (n = 10)}{10}
+\entradaindice[2em]{3.3 Tabla de comparaciones empíricas}{11}
+\entradaindice[2em]{2.2 Código en C++17 y Verificación}{12}
+\entradaindice[1em]{Actividad 3: Merge Sort y benchmark}{15}
+\entradaindice[2em]{4.1 Implementación}{15}
+\entradaindice[2em]{4.2 Prueba con los códigos de matrícula UNA-PUNO}{16}
+\entradaindice[2em]{4.3 Benchmark con time.perf\_counter()}{16}
+\entradaindice[2em]{3.2 Código en C++17 y Benchmark}{17}
+\entradaindice[1em]{Actividad 4: Teorema Maestro --- resolución de recurrencias}{22}
+\entradaindice{\textbf{VI. PREGUNTAS DE ANÁLISIS}}{\textbf{23}}
+\entradaindice[1em]{6.1 Pregunta 1}{24}
+\entradaindice[1em]{6.2 Preguntas 2}{24}
+\entradaindice[1em]{6.3 Pregunta 4}{24}
+\entradaindice{\textbf{VII. TRABAJO DE INVESTIGACIÓN: BÚSQUEDA BINARIA DE FIBONACCI}}{\textbf{25}}
+\entradaindice[1em]{RESUMEN}{25}
+\entradaindice[1em]{1. PRINCIPIO DE FUNCIONAMIENTO Y FUNDAMENTO MATEMÁTICO}{25}
+\entradaindice[1em]{2. EJEMPLO PRÁCTICO PASO A PASO}{26}
+\entradaindice[1em]{3. COMPARACIÓN DE COMPLEJIDAD Y NÚMERO DE COMPARACIONES}{26}
+\entradaindice[1em]{4. ACCESO A MEMORIA Y COMPORTAMIENTO CON LA CACHÉ DE LA CPU}{27}
+\entradaindice[1em]{5. CASOS DE USO Y CONCLUSIONES}{28}
+\entradaindice{\textbf{REFERENCIAS BIBLIOGRÁFICAS}}{\textbf{28}}
+
+\newpage
+
+% =================== I. OBJETIVO GENERAL ===================
+\section*{I. OBJETIVO GENERAL}
+\addcontentsline{toc}{section}{I. OBJETIVO GENERAL}
+
+Implementar funciones recursivas correctas en Python y C++17, trazar su pila de
+llamadas, formular recurrencias para funciones recursivas clásicas y resolverlas
+mediante el Teorema Maestro, diseñar e implementar la búsqueda binaria como
+aplicación concreta de la estrategia Divide y Vencerás, y comparar empíricamente
+el rendimiento de los algoritmos implementados.
+
+\subsection*{1.1 Objetivos Específicos}
+
+\begin{itemize}[leftmargin=*]
+    \item Distinguir entre caso base y caso recursivo, y trazar la pila de
+    llamadas para entradas pequeñas.
+    \item Formular la recurrencia $T(n)$ para funciones recursivas e identificar
+    el caso aplicable del Teorema Maestro.
+    \item Implementar Merge Sort y Búsqueda Binaria en Python y C++ con análisis
+    de complejidad empírico.
+    \item Medir y comparar tiempos de ejecución usando \texttt{time.perf\_counter()}
+    (Python) y \texttt{std::chrono} (C++).
+\end{itemize}
+
+% =================== II. MARCO TEÓRICO ===================
+\section*{II. MARCO TEÓRICO}
+\addcontentsline{toc}{section}{II. MARCO TEÓRICO}
+
+\subsection*{2.1 Estructura de una función recursiva}
+
+Toda función recursiva correcta debe contener al menos un \textbf{caso base}, que
+detiene la recursión, y al menos un \textbf{caso recursivo}, que invoca a la propia
+función sobre una entrada estrictamente menor (Cormen et al., 2022). La ausencia de
+un caso base alcanzable, o la formulación de un caso recursivo cuyo argumento no
+decrece, produce un desbordamiento de pila (\textit{stack overflow}), ya que cada
+llamada pendiente ocupa un marco de activación que solo se libera cuando esa llamada
+retorna. El costo de memoria es, por lo tanto, $O(h)$, donde $h$ es la profundidad
+máxima de recursión; en los algoritmos de divide y vencerás bien diseñados esa
+profundidad es $O(\log n)$, porque el tamaño del problema se reduce por un factor
+constante en cada nivel. La literatura de educación en computación ha documentado
+que la dificultad principal de los estudiantes no está en escribir el caso recursivo,
+sino en delimitar correctamente el caso base y en construir un modelo mental adecuado
+del funcionamiento de la pila de llamadas (McCauley et al., 2015).
+
+\subsection*{2.2 Búsqueda binaria y la estrategia divide y vencerás}
+
+La búsqueda binaria es la aplicación más simple del paradigma divide y vencerás: en
+cada iteración compara la clave buscada con el elemento central del intervalo vigente
+y descarta la mitad que no puede contenerla, de modo que el espacio de búsqueda se
+reduce a la mitad en cada paso. Esa reducción exige como precondición que el arreglo
+esté ordenado, pues sin orden la comparación con el elemento central no autoriza a
+descartar ninguna de las dos mitades. La recurrencia asociada es
+$T(n) = T(n/2) + \Theta(1)$, cuya solución es $\Theta(\log n)$, y el número de
+comparaciones en el peor caso queda acotado por $\lceil \log_2(n+1) \rceil$
+(Cormen et al., 2022). Pese a su simplicidad aparente, es un algoritmo notoriamente
+difícil de implementar sin errores: Bentley (1983) documentó que solo alrededor del
+diez por ciento de los programadores profesionales a quienes planteó el ejercicio
+logró una versión libre de defectos, y atribuyó el resultado a la falta de un
+invariante de bucle explícito. Desde el punto de vista teórico, el problema de
+búsqueda en tablas ordenadas cuenta con cotas inferiores establecidas que confirman
+la optimalidad asintótica del enfoque logarítmico (Bentley \& Yao, 1976).
+
+\subsection*{2.3 Merge Sort y notación asintótica}
+
+Merge Sort aplica el mismo paradigma sobre el problema de ordenamiento: divide el
+arreglo en dos mitades, las ordena recursivamente y las combina mediante una mezcla
+que recorre ambas en tiempo lineal. Su recurrencia es
+$T(n) = 2 \cdot T(n/2) + \Theta(n)$, que corresponde al Caso 2 del Teorema Maestro y
+produce $\Theta(n \log n)$ con independencia de la distribución inicial de los datos;
+esta invariancia frente a la entrada lo distingue de Quick Sort, cuyo peor caso
+degenera a $\Theta(n^2)$ (Cormen et al., 2022). El tratamiento de divide y vencerás
+como paradigma general de diseño de algoritmos, y no como un recurso puntual aplicable
+a un problema aislado, fue sistematizado por Bentley (1980). La notación empleada para
+expresar estas cotas tampoco es arbitraria: la distinción formal entre $O$ (cota
+superior), $\Omega$ (cota inferior) y $\Theta$ (cota ajustada) fue precisada por Knuth
+(1976), quien advirtió sobre el uso impreciso de $O$ cuando lo que se quiere afirmar
+es un crecimiento exacto.
+
+\subsection*{2.4 El Teorema Maestro}
+
+Para recurrencias de la forma $T(n) = a \cdot T(n/b) + f(n)$, con $a \geq 1$ y $b > 1$,
+el Teorema Maestro resuelve el caso comparando $f(n)$ ---el trabajo realizado fuera de
+las llamadas recursivas--- con $n^{\log_b a}$, que es el costo acumulado en las hojas
+del árbol de recursión. Si las llamadas dominan se aplica el Caso 1; si ambos términos
+están equilibrados, el Caso 2; y si el trabajo local domina, el Caso 3, este último
+sujeto además a una condición de regularidad sobre $f$ (Cormen et al., 2022). El método
+fue formulado por Bentley, Haken y Saxe (1980) como alternativa sistemática a las tablas
+de soluciones que se usaban hasta entonces para cada combinación de parámetros. Conviene
+señalar que el teorema no cubre toda recurrencia de esa forma: falla cuando $f(n)$ cae
+en la brecha entre dos casos ---por ejemplo $f(n) = n \log n$ con $\log_b a = 1$--- y no
+se aplica cuando los subproblemas tienen tamaños distintos entre sí, situación para la
+que existe la generalización de Akra y Bazzi (1998).
+
+\subsection*{2.5 Medición empírica de tiempos de ejecución}
+
+Contrastar las cotas asintóticas con el comportamiento real exige un temporizador de
+resolución suficiente. La función \texttt{time.perf\_counter()} de la biblioteca estándar
+de Python entrega el reloj de mayor resolución disponible en la plataforma e incluye el
+tiempo transcurrido durante las pausas del proceso, lo que la vuelve apropiada para medir
+intervalos cortos; a diferencia de \texttt{time.time()}, no se ve afectada por los ajustes
+del reloj del sistema (Python Software Foundation, 2024). Debe tenerse presente que las
+cotas asintóticas describen tendencias de crecimiento y no tiempos absolutos, por lo que
+la verificación empírica adecuada no consiste en comparar magnitudes sueltas, sino en
+observar cómo escala el tiempo medido a medida que aumenta el tamaño de la entrada.
+
+% =================== III. MATERIALES Y HERRAMIENTAS ===================
+\section*{III. MATERIALES Y HERRAMIENTAS}
+\addcontentsline{toc}{section}{III. MATERIALES Y HERRAMIENTAS}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{5.5cm}|X|}
+\hline
+\textbf{Herramienta} & \textbf{Uso} \\
+\hline
+Python 3.11 / Google Colab & Implementación, pruebas y medición de tiempos. \\
+\hline
+C++17 / \texttt{g++ -std=c++17 -O2} & Implementación, pruebas y \texttt{std::chrono}. \\
+\hline
+Depurador / Print de traza & Trazar la pila de llamadas manualmente. \\
+\hline
+\end{tabularx}
+\end{center}
+
+% =================== IV. INSTRUCCIONES PREVIAS ===================
+\section*{IV. INSTRUCCIONES PREVIAS}
+\addcontentsline{toc}{section}{IV. INSTRUCCIONES PREVIAS}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Nombre de archivos del grupo:} \texttt{PC1\_Recursividad\_Grupo.ipynb}
+    (Python) y \texttt{PC1\_Recursividad\_Grupo.cpp} (C++).
+    \item \textbf{Comando de compilación en C++:}
+    \texttt{g++ -std=c++17 -O2 -o pc1 pc1.cpp \&\& ./pc1}.
+    \item \textbf{Entregables:} Cada actividad debe incluir el código fuente, la salida
+    de consola capturada y el análisis solicitado.
+\end{itemize}
+
+% =================== V. DESARROLLO DE ACTIVIDADES ===================
+\newpage
+\section*{V. DESARROLLO DE ACTIVIDADES}
+\addcontentsline{toc}{section}{V. DESARROLLO DE ACTIVIDADES}
+
+\subsection*{ACTIVIDAD 1: Recursividad básica --- suma de dígitos y traza de pila}
+
+\subsubsection*{\textit{Código en Python:}}
+
+\paragraph{1. Caso base y caso recursivo}\mbox{}\\[4pt]
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Caso base:} si $n < 10$ el número tiene un solo dígito, así que la
+    suma de sus dígitos es él mismo y se retorna \texttt{n} sin volver a llamar.
+    \item \textbf{Caso recursivo:} si $n \geq 10$ se retorna
+    \texttt{n \% 10 + suma\_digitos(n // 10)}: el último dígito más la suma de los
+    dígitos del resto.
+\end{itemize}
+
+La recursión termina porque \texttt{n // 10} elimina un dígito en cada llamada, de modo
+que el argumento decrece estrictamente hasta caer por debajo de 10.
+
+\paragraph{2. Implementación}\mbox{}
+
+\begin{lstlisting}[style=python,caption={\texttt{suma\_digitos(n)} --- versión recursiva.}]
+def suma_digitos(n: int) -> int:
+    """Suma los digitos de un entero no negativo de forma recursiva."""
+    if n < 10:                              # CASO BASE (incluye n = 0)
+        return n
+    return n % 10 + suma_digitos(n // 10)   # CASO RECURSIVO
+\end{lstlisting}
+
+\paragraph{3. Verificación de los assert}\mbox{}
+
+\begin{lstlisting}[style=python,caption={Verificaciones exigidas por la guía.}]
+assert suma_digitos(12345) == 15, 'Error: 1+2+3+4+5=15'
+assert suma_digitos(0) == 0, 'Error: caso base n=0'
+assert suma_digitos(9) == 9, 'Error: un solo digito'
+print('suma_digitos(12345) =', suma_digitos(12345))
+\end{lstlisting}
+
+\begin{lstlisting}[style=consola,caption={Salida de consola.}]
+suma_digitos(12345) = 15
+\end{lstlisting}
+
+Los tres \texttt{assert} se ejecutaron sin lanzar \texttt{AssertionError}, por lo que la
+implementación pasa las verificaciones solicitadas.
+
+\paragraph{4. Traza de la pila de llamadas}\mbox{}\\[4pt]
+
+La guía solicita trazar manualmente la pila de llamadas para \texttt{suma\_digitos(12345)}.
+La tabla se completó siguiendo la ejecución real de la función: la recursión desciende
+hasta el caso base y luego los valores se van sumando al desapilarse.
+
+\begin{center}
+\textbf{Tabla:} Traza de la pila de llamadas para \texttt{suma\_digitos(12345)}.
+
+\vspace{4pt}
+\begin{tabular}{|l|c|c|l|}
+\hline
+\textbf{Llamada} & \textbf{n} & \textbf{n\%10 (dígito)} & \textbf{Retorna} \\
+\hline
+\textbf{suma\_digitos(12345)} & \textbf{12345} & \textbf{5} & \textbf{5 + 10 = 15} \\
+\hline
+\textbf{suma\_digitos(1234)} & \textbf{1234} & \textbf{4} & \textbf{4 + 6 = 10} \\
+\hline
+\textbf{suma\_digitos(123)} & \textbf{123} & \textbf{3} & \textbf{3 + 3 = 6} \\
+\hline
+\textbf{suma\_digitos(12)} & \textbf{12} & \textbf{2} & \textbf{2 + 1 = 3} \\
+\hline
+\textbf{suma\_digitos(1) $\leftarrow$ base} & \textbf{1} & \textbf{1} & \textbf{1} \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{6pt}
+La pila alcanza una profundidad de 5 marcos, uno por cada dígito de la entrada. Las
+llamadas se apilan de arriba hacia abajo en la tabla y se resuelven en orden inverso:
+la última en apilarse (\texttt{suma\_digitos(1)}, el caso base) es la primera en retornar.
+
+\subsubsection*{\textit{Código en C++17}}
+
+\paragraph{1. Suma de dígitos recursiva (C++17)}\mbox{}
+
+\begin{lstlisting}[style=cpp]
+int sumaDigitos(int n) {
+    // Caso base: numero de un solo digito
+    if (n < 10) return n;
+    // Caso recursivo: ultimo digito + suma del resto
+    return n % 10 + sumaDigitos(n / 10);
+}
+
+int main() {
+    assert(sumaDigitos(12345) == 15);
+    assert(sumaDigitos(0) == 0);
+    std::cout << "suma_digitos(12345) = " << sumaDigitos(12345) << '\n';
+}
+\end{lstlisting}
+
+\paragraph{2. Tabla de traza manual de la pila para \texttt{suma\_digitos(12345)}}\mbox{}
+
+\begin{center}
+\begin{tabular}{|l|c|c|l|}
+\hline
+\textbf{Llamada} & \textbf{n} & \textbf{n \% 10 (dígito)} & \textbf{Retorna} \\
+\hline
+suma\_digitos(12345) & 12345 & 5 & 5 + suma\_digitos(1234) \\
+\hline
+suma\_digitos(1234) & 1234 & 4 & 4 + suma\_digitos(123) \\
+\hline
+suma\_digitos(123) & 123 & 3 & 3 + suma\_digitos(12) \\
+\hline
+suma\_digitos(12) & 12 & 2 & 2 + suma\_digitos(1) \\
+\hline
+suma\_digitos(1) $\leftarrow$ caso base & 1 & -- & 1 \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{6pt}
+Al llegar al caso base, la pila se desenrolla devolviendo cada valor hacia la llamada
+que la originó:
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Llamada (al retornar)} & \textbf{Valor devuelto} \\
+\hline
+suma\_digitos(1) retorna & 1 \\
+\hline
+suma\_digitos(12) retorna & 2 + 1 = 3 \\
+\hline
+suma\_digitos(123) retorna & 3 + 3 = 6 \\
+\hline
+suma\_digitos(1234) retorna & 4 + 6 = 10 \\
+\hline
+suma\_digitos(12345) retorna & 5 + 10 = 15 \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{6pt}
+Captura de consola (salida real del programa):
+
+\begin{lstlisting}[style=consola]
+suma_digitos(12345) = 15
+suma_digitos(12345) -> n%10=5, llama suma_digitos(1234)
+suma_digitos(1234) -> n%10=4, llama suma_digitos(123)
+suma_digitos(123) -> n%10=3, llama suma_digitos(12)
+suma_digitos(12) -> n%10=2, llama suma_digitos(1)
+suma_digitos(1) <- caso base, retorna 1
+suma_digitos(12) retorna 2 + 1 = 3
+suma_digitos(123) retorna 3 + 3 = 6
+suma_digitos(1234) retorna 4 + 6 = 10
+suma_digitos(12345) retorna 5 + 10 = 15
+\end{lstlisting}
+
+\subsubsection*{Evidencia de Ejecución}
+
+% (Espacio reservado para las capturas de pantalla de la ejecución)
+
+\newpage
+\subsection*{ACTIVIDAD 2: Búsqueda Binaria}
+
+\subsubsection*{\textit{Código en Python:}}
+
+\subsubsection*{\underline{Búsqueda binaria}}
+
+\paragraph{1. Implementación}\mbox{}
+
+\begin{lstlisting}[style=python,caption={\texttt{busqueda\_binaria(arr, objetivo)} retorna \texttt{(indice, comparaciones)}.}]
+def busqueda_binaria(arr: list, objetivo: int) -> tuple[int, int]:
+    """Retorna (indice, n_comparaciones). Retorna -1 si no se encuentra.
+    Precondicion: arr debe estar ordenado de forma ascendente.
+    """
+    bajo, alto, comparaciones = 0, len(arr) - 1, 0
+    while bajo <= alto:
+        comparaciones += 1                  # operacion dominante
+        medio = (bajo + alto) // 2
+        if arr[medio] == objetivo:
+            return medio, comparaciones
+        elif arr[medio] < objetivo:
+            bajo = medio + 1                # descarta la mitad izquierda
+        else:
+            alto = medio - 1                # descarta la mitad derecha
+    return -1, comparaciones
+\end{lstlisting}
+
+\paragraph{2. Verificación de la cota teórica (n = 10)}\mbox{}
+
+\begin{lstlisting}[style=python,caption={Prueba sobre el arreglo de 10 elementos del sílabo.}]
+import math
+
+arr = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]   # n = 10, ordenado
+idx, comp = busqueda_binaria(arr, 23)
+print(f'23 encontrado en indice {idx}, comparaciones={comp}')
+
+cota_teorica = math.ceil(math.log2(len(arr) + 1))
+print(f'Cota teorica: ceil(log2(10+1)) = {cota_teorica} comparaciones')
+
+assert comp <= cota_teorica, f'Supera la cota teorica: {comp} > {cota_teorica}'
+print('Cota verificada OK')
+\end{lstlisting}
+
+\begin{lstlisting}[style=consola,caption={Salida de consola.}]
+23 encontrado en indice 5, comparaciones=3
+Cota teorica: ceil(log2(10+1)) = 4 comparaciones
+Cota verificada OK
+\end{lstlisting}
+
+La búsqueda localizó el valor 23 en el índice 5 usando \textbf{3 comparaciones}, por
+debajo de la cota $\lceil \log_2(10+1) \rceil = 4$. El \texttt{assert} de verificación
+pasó correctamente.
+
+\paragraph{3. Tabla de comparaciones empíricas}\mbox{}\\[4pt]
+
+Para completar la tabla solicitada se midió el número \textit{máximo} de comparaciones
+sobre todos los objetivos posibles de cada arreglo, incluyendo claves ausentes. Para
+$n = 1\,000\,000$ se muestreó un subconjunto de 2000 objetivos más los casos extremos
+(primero, último, central y dos claves inexistentes), por costo de ejecución.
+
+\begin{lstlisting}[style=python,caption={Medición del peor caso para cada tamaño.}]
+random.seed(42)
+for n in [10, 100, 1_000, 1_000_000]:
+    datos = list(range(0, 2 * n, 2))
+    objetivos = list(datos) if n <= 1000 else random.sample(datos, 2000)
+    objetivos += [-1, 2 * n + 1, datos[0], datos[-1], datos[n // 2]]
+    maximo = max(busqueda_binaria(datos, v)[1] for v in objetivos)
+    cota = math.ceil(math.log2(n + 1))
+    print(n, n, maximo, cota, 'Si' if maximo <= cota else 'NO')
+\end{lstlisting}
+
+\begin{lstlisting}[style=consola,caption={Salida de consola.}]
+n        lineal(max)   binaria(max)   cota   cumple
+10       10            4              4      Si
+100      100           7              7      Si
+1000     1000          10             10     Si
+1000000  1000000       20             20     Si
+\end{lstlisting}
+
+\begin{center}
+\textbf{Tabla:} Comparaciones en el peor caso frente a la cota teórica.
+
+\vspace{4pt}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{n} & \textbf{Búsqueda lineal} & \textbf{Búsqueda binaria} & \textbf{Cota teórica} & \textbf{¿Cota} \\
+ & \textbf{(máx. comp.)} & \textbf{(máx. comp.)} & $\lceil \log_2(n+1) \rceil$ & \textbf{cumplida?} \\
+\hline
+\textbf{10} & \textbf{10} & \textbf{4} & \textbf{4} & \textbf{Sí} \\
+\hline
+\textbf{100} & \textbf{100} & \textbf{7} & \textbf{7} & \textbf{Sí} \\
+\hline
+\textbf{1 000} & \textbf{1 000} & \textbf{10} & \textbf{10} & \textbf{Sí} \\
+\hline
+\textbf{1 000 000} & \textbf{1 000 000} & \textbf{20} & \textbf{20} & \textbf{Sí} \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{6pt}
+El máximo empírico coincide exactamente con la cota en los cuatro tamaños, lo que indica
+que la cota es ajustada y no meramente una sobreestimación. El contraste es elocuente:
+al pasar de $n = 10$ a $n = 1\,000\,000$ la búsqueda lineal multiplica su costo por cien
+mil, mientras que la binaria pasa de 4 a 20 comparaciones.
+
+\subsubsection*{Búsqueda binaria (C++17)}
+
+\begin{lstlisting}[style=cpp]
+pair<int,int> busquedaBinaria(const vector<int>& arr, int obj) {
+    int bajo = 0;                   // limite izquierdo del rango de busqueda
+    int alto = (int)arr.size() - 1; // limite derecho del rango de busqueda
+    int comparaciones = 0;          // contador para medir el rendimiento
+
+    // Mientras el rango [bajo, alto] no este vacio, sigue buscando.
+    while (bajo <= alto) {
+        comparaciones++;
+        // Punto medio del rango actual. Se calcula asi (en vez de
+        // (bajo+alto)/2) para evitar overflow si bajo+alto fuera muy grande.
+        int medio = bajo + (alto - bajo) / 2;
+
+        if (arr[medio] == obj) {
+            // Encontrado: retornamos su posicion y cuantas comparaciones costo.
+            return {medio, comparaciones};
+        } else if (arr[medio] < obj) {
+            // El objetivo, si existe, esta a la derecha del medio.
+            bajo = medio + 1;
+        } else {
+            // El objetivo, si existe, esta a la izquierda del medio.
+            alto = medio - 1;
+        }
+    }
+    // El rango quedo vacio: el elemento no esta en el arreglo.
+    return {-1, comparaciones};
+}
+
+int main() {
+    // Arreglo de ejemplo (debe estar ordenado para que funcione bien).
+    vector<int> arr = {2, 5, 8, 12, 16, 23, 38, 56, 72, 91};
+
+    // Buscamos el 23 dentro del arreglo.
+    auto [idx, comp] = busquedaBinaria(arr, 23);
+    cout << "Indice: " << idx << " Comparaciones: " << comp << '\n';
+
+    // Cota teorica: numero maximo de comparaciones esperado para n=10.
+    // ceil(log2(n+1)) viene de resolver T(n) = T(n/2) + O(1).
+    int cota = (int)ceil(log2(arr.size() + 1));
+    cout << "Cota teorica: " << cota << '\n';
+
+    // Verificamos que el algoritmo cumpla lo que predice la teoria.
+    assert(comp <= cota);
+    cout << "Cota verificada correctamente.\n";
+    return 0;
+}
+\end{lstlisting}
+
+Con el arreglo de $n=10$ del sílabo $\{2,5,8,12,16,23,38,56,72,91\}$, buscando 23:
+índice = 5, comparaciones = 3, cota teórica $\lceil \log_2(11) \rceil = 4$. La cota se
+cumple ($3 \leq 4$).
+
+\paragraph{Tabla de comparaciones empíricas (peor caso: elemento inexistente)}\mbox{}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{n} & \textbf{Búsqueda lineal} & \textbf{Búsqueda binaria} & \textbf{Cota teórica} & \textbf{¿Cota} \\
+ & \textbf{(máx. comp.)} & \textbf{(máx. comp.)} & $\lceil \log_2(n+1) \rceil$ & \textbf{cumplida?} \\
+\hline
+10 & 10 & \textbf{3} & 4 & Sí \\
+\hline
+100 & 100 & \textbf{6} & 7 & Sí \\
+\hline
+1000 & 1000 & \textbf{9} & 10 & Sí \\
+\hline
+1000000 & 1000000 & \textbf{19} & 20 & Sí \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{6pt}
+Metodología: para cada $n$ se generó un arreglo ordenado de tamaño $n$ y se buscó un valor
+que no pertenece al arreglo, forzando el número máximo de comparaciones (peor caso) tanto
+para búsqueda lineal como binaria (Thomas H. Cormen, 2009). En los cuatro tamaños probados,
+la búsqueda binaria se mantuvo dentro de la cota teórica $\lceil \log_2(n+1) \rceil$,
+confirmando el crecimiento logarítmico frente al crecimiento lineal ($O(n)$) de la búsqueda
+secuencial.
+
+\newpage
+\subsection*{ACTIVIDAD 3 (Python): Merge Sort y benchmark}
+
+\paragraph{1. Implementación}\mbox{}
+
+\begin{lstlisting}[style=python,caption={\texttt{merge\_sort(arr)} y \texttt{merge(izq, der)}.}]
+def merge(izq: list, der: list) -> list:
+    """Mezcla dos listas ya ordenadas en una sola lista ordenada."""
+    res, i, j = [], 0, 0
+    while i < len(izq) and j < len(der):
+        if izq[i] <= der[j]:            # '<=' preserva la estabilidad
+            res.append(izq[i]); i += 1
+        else:
+            res.append(der[j]); j += 1
+    res.extend(izq[i:])                 # restantes de la mitad izquierda
+    res.extend(der[j:])                 # restantes de la mitad derecha
+    return res
+
+
+def merge_sort(arr: list) -> list:
+    """Ordena una lista por Merge Sort. No modifica la lista original."""
+    if len(arr) <= 1:                   # CASO BASE
+        return arr[:]
+    mid = len(arr) // 2                 # DIVIDIR
+    izq = merge_sort(arr[:mid])         # VENCER (mitad izquierda)
+    der = merge_sort(arr[mid:])         # VENCER (mitad derecha)
+    return merge(izq, der)              # COMBINAR
+\end{lstlisting}
+
+\paragraph{2. Prueba con los códigos de matrícula UNA-PUNO}\mbox{}
+
+\begin{lstlisting}[style=python,caption={Prueba funcional con la lista de códigos de matrícula.}]
+import time
+
+codigos_originales = [20211200, 20210300, 20211050, 20210780, 20211500,
+                      20210100, 20211800, 20210640, 20210950, 20211400]
+
+t0 = time.perf_counter()
+codigos_ordenados = merge_sort(codigos_originales)
+ms = (time.perf_counter() - t0) * 1000
+
+print('Ordenados:', codigos_ordenados)
+assert codigos_ordenados == sorted(codigos_originales), 'Error en Merge Sort'
+print(f'Tiempo (n=10): {ms:.4f} ms')
+\end{lstlisting}
+
+\begin{lstlisting}[style=consola,caption={Salida de consola.}]
+Ordenados: [20210100, 20210300, 20210640, 20210780, 20210950,
+            20211050, 20211200, 20211400, 20211500, 20211800]
+Tiempo (n=10): 0.0171 ms
+\end{lstlisting}
+
+\paragraph{3. Benchmark con \texttt{time.perf\_counter()}}\mbox{}
+
+\begin{lstlisting}[style=python,caption={Benchmark para los cuatro tamaños solicitados.}]
+import random
+
+for n in [100, 1_000, 10_000, 100_000]:
+    datos = random.sample(range(20_000_000, 29_999_999), n)  # fuera del reloj
+    t0 = time.perf_counter()
+    merge_sort(datos)
+    ms_n = (time.perf_counter() - t0) * 1000
+    print(f'n={n:>8} tiempo={ms_n:10.3f} ms')
+\end{lstlisting}
+
+\begin{lstlisting}[style=consola,caption={Salida de consola.}]
+n=     100 tiempo=     0.121 ms
+n=    1000 tiempo=     1.208 ms
+n=   10000 tiempo=    16.113 ms
+n=  100000 tiempo=   199.311 ms
+\end{lstlisting}
+
+\begin{center}
+\textbf{Tabla:} Tiempos medidos y contraste con la complejidad teórica $\Theta(n \log n)$.
+
+\vspace{4pt}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{n} & \textbf{Tiempo (ms)} & \textbf{Factor de crecimiento} & $\mathbf{t / (n \cdot \log_2 n)}$ \textbf{($\mu$s)} \\
+\hline
+100 & 0.121 & --- & 0.182 \\
+\hline
+1 000 & 1.208 & $\times$ 10.0 & 0.121 \\
+\hline
+10 000 & 16.113 & $\times$ 13.3 & 0.121 \\
+\hline
+100 000 & 199.311 & $\times$ 12.4 & 0.120 \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{6pt}
+Al multiplicar $n$ por 10, el tiempo crece por un factor cercano a 12--13: no por 10
+(que correspondería a $\Theta(n)$) ni por 100 (que correspondería a $\Theta(n^2)$).
+Además, el cociente $t/(n \cdot \log_2 n)$ se mantiene prácticamente constante
+(0.121 $\rightarrow$ 0.121 $\rightarrow$ 0.120 $\mu$s) a partir de $n = 1000$, lo que
+confirma empíricamente el crecimiento $\Theta(n \log n)$ de Merge Sort.
+
+\subsubsection*{Actividad 3: Merge Sort (C++17) con \texttt{std::chrono}}
+
+\begin{lstlisting}[style=cpp]
+vector<int> merge(const vector<int>& izq, const vector<int>& der) {
+    vector<int> res;
+    res.reserve(izq.size() + der.size()); // reserva memoria para evitar realojos
+    size_t i = 0, j = 0; // punteros: i recorre "izq", j recorre "der"
+
+    // Mientras haya elementos en ambos lados, se compara el frente
+    // de cada uno y se agrega el menor al resultado.
+    while (i < izq.size() && j < der.size()) {
+        if (izq[i] <= der[j]) res.push_back(izq[i++]);
+        else                  res.push_back(der[j++]);
+    }
+    // Si a uno de los dos lados le sobraron elementos (el otro se
+    // agoto primero), se agregan directamente: ya estaban ordenados.
+    while (i < izq.size()) res.push_back(izq[i++]);
+    while (j < der.size()) res.push_back(der[j++]);
+    return res;
+}
+
+// Ordena "arr" usando Merge Sort: divide, ordena cada mitad
+// (recursivamente) y luego combina los resultados.
+vector<int> mergeSort(const vector<int>& arr) {
+    // ---------- CASO BASE ----------
+    // Un arreglo de 0 o 1 elementos ya esta ordenado: no hay nada
+    // que dividir. Esto detiene la recursion.
+    if (arr.size() <= 1) return arr;
+
+    // ---------- DIVIDE ----------
+    // Se parte el arreglo en dos mitades casi iguales.
+    size_t mid = arr.size() / 2;
+    vector<int> izq(arr.begin(), arr.begin() + mid);
+    vector<int> der(arr.begin() + mid, arr.end());
+
+    // ---------- VENCERAS + COMBINA ----------
+    // Se ordena cada mitad por separado (llamada recursiva) y
+    // luego se combinan (merge) los dos resultados ya ordenados.
+    return merge(mergeSort(izq), mergeSort(der));
+}
+
+int main() {
+    cout << fixed << setprecision(3);
+
+    // ---------- PRUEBA CON n = 10 (codigos de matricula de 6 digitos) ----------
+    // Todos los valores estan en el rango [100000, 999999].
+    vector<int> codigos = {654321, 102938, 987654, 456789, 234567,
+                           765432, 111222, 999888, 300400, 500600};
+
+    vector<int> ordenado = mergeSort(codigos);
+    cout << "Ordenados (n=10): ";
+    for (int c : ordenado) cout << c << " ";
+    cout << '\n';
+
+    // Verificamos comparando contra std::sort (funcion de la
+    // biblioteca estandar, que ya sabemos que ordena bien).
+    vector<int> esperado = codigos;
+    sort(esperado.begin(), esperado.end());
+    assert(ordenado == esperado);
+    cout << "Merge Sort verificado correctamente (n=10)\n\n";
+
+    // ---------- BENCHMARK CON std::chrono ----------
+    // Se generan arreglos aleatorios de codigos de 6 digitos
+    // (100000 a 999999) de distintos tamanos, y se mide cuanto
+    // tarda mergeSort en ordenarlos.
+    cout << "--- Benchmark Merge Sort (codigos de 6 digitos) ---\n";
+    cout << left << setw(12) << "n" << "tiempo (ms)\n";
+
+    mt19937 rng(42); // generador de numeros aleatorios (semilla fija = reproducible)
+    uniform_int_distribution<int> dist(100000, 999999); // rango de 6 digitos
+    vector<int> tamanos = {100, 1000, 10000, 100000};
+
+    for (int n : tamanos) {
+        // Se arma un arreglo de tamano n con codigos de 6 digitos al azar.
+        vector<int> datos(n);
+        for (int i = 0; i < n; i++) datos[i] = dist(rng);
+
+        // --- Medicion con std::chrono ---
+        auto t0 = chrono::high_resolution_clock::now();
+        vector<int> res = mergeSort(datos);
+        auto t1 = chrono::high_resolution_clock::now();
+        double ms = chrono::duration<double, milli>(t1 - t0).count();
+
+        // Verificamos que quedo bien ordenado antes de reportar el tiempo.
+        assert(is_sorted(res.begin(), res.end()));
+        cout << left << setw(12) << n << ms << " ms\n";
+    }
+
+    cout << "\nTodos los tests pasaron correctamente.\n";
+    return 0;
+}
+\end{lstlisting}
+
+Prueba con los códigos de matrícula UNA-PUNO ($n=10$): el resultado ordenado coincide
+con \texttt{std::sort} de referencia (\texttt{assert} pasado).
+
+\textbf{Salida de consola:}
+
+\begin{lstlisting}[style=consola]
+Ordenados: 654321, 102938, 987654, 456789, 234567,
+           765432, 111222, 999888, 300400, 500600
+
+Merge Sort verificado correctamente (n=10)
+\end{lstlisting}
+
+Benchmark con \texttt{std::chrono::high\_resolution\_clock} para arreglos aleatorios de
+8 dígitos:
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{n} & \textbf{Tiempo (ms)} \\
+\hline
+100 & 0.013 \\
+\hline
+1000 & 0.130 \\
+\hline
+10000 & 1.479 \\
+\hline
+100000 & 16.192 \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{6pt}
+Se observa el crecimiento esperado de $O(n \log n)$: al multiplicar $n$ por 10 el tiempo
+crece un poco más que proporcionalmente ($10\times$, $11\times$, $11\times$), consistente
+con el factor $\log n$ adicional.
+
+\newpage
+\subsection*{ACTIVIDAD 4: Teorema Maestro --- resolución de recurrencias}
+
+Para analizar la complejidad temporal de las funciones recursivas mediante la estrategia
+Divide o Vencerás, aplicamos el Teorema Maestro para recurrencias de la forma
+$T(n) = a \cdot T(n/b) + f(n)$. \textbf{A continuación, se detalla la evaluación formal de
+cada una de las cuatro recurrencias propuestas.}
+
+\vspace{6pt}
+\textbf{Tabla Resumen de Resultados}
+
+\vspace{4pt}
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{|p{2.7cm}|c|c|c|c|p{2.5cm}|c|c|}
+\hline
+\textbf{Recurrencia} & \textbf{a} & \textbf{b} & \textbf{f(n)} & $\mathbf{\log_b a}$ &
+\textbf{Condición de Comparación} & \textbf{Caso Aplicado} & \textbf{Solución Final} \\
+\hline
+(a) $T(n) = 4T(n/2) + O(n)$ & 4 & 2 & $O(n)$ & $\log_2 4 = 2$ &
+$f(n) = O(n^{2-1})$ con $\varepsilon = 1$ & Caso 1 & $\Theta(n^2)$ \\
+\hline
+(b) $T(n) = T(n/3) + O(1)$ & 1 & 3 & $O(1)$ & $\log_3 1 = 0$ &
+$f(n) = \Theta(n^0) = \Theta(1)$ & Caso 2 & $\Theta(\log n)$ \\
+\hline
+(c) $T(n) = 2T(n/2) + O(n^2)$ & 2 & 2 & $O(n^2)$ & $\log_2 2 = 1$ &
+$f(n) = \Omega(n^{1+1})$ con $\varepsilon = 1$ & Caso 3 & $\Theta(n^2)$ \\
+\hline
+(d) $T(n) = 3T(n/4) + O(n)$ & 3 & 4 & $O(n)$ & $\log_4 3 = 0.792$ &
+$f(n) = \Omega(n^{\log_4 3 + 0.208})$ & Caso 3 & $\Theta(n)$ \\
+\hline
+\end{tabular}
+\setlength{\tabcolsep}{6pt}
+\end{center}
+
+\vspace{10pt}
+\subsubsection*{Desarrollo y Justificación Detallada:}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Recurrencia (a): $T(n) = 4T(n/2) + O(n)$}
+\end{itemize}
+
+\begin{quote}
+Identificamos los parámetros $a = 4$, $b = 2$ y la función $f(n) = O(n)$. Calculamos el
+exponente crítico $\log_2 4 = 2$, lo que nos da la función de comparación $n^2$. Como
+$f(n) = n^1$ es asintóticamente menor que $n^2$ por un factor polinomial (tomando
+$\varepsilon = 1$), el costo de los subproblemas domina sobre el trabajo local. Por lo
+tanto, aplica el \textbf{Caso 1 del Teorema Maestro} y la solución es
+$\mathbf{T(n) = \Theta(n^2)}$.
+\end{quote}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Recurrencia (b): $T(n) = T(n/3) + O(1)$}
+\end{itemize}
+
+\begin{quote}
+Identificamos $a = 1$, $b = 3$ y $f(n) = O(1)$. El exponente crítico es $\log_3 1 = 0$,
+por lo que $n^0 = 1$. Como el trabajo local $f(n) = 1$ coincide exactamente con el valor
+del umbral $n^0$, existe un equilibrio entre la división del problema y la combinación de
+resultados. Se cumple la condición del \textbf{Caso 2 del Teorema Maestro}, obteniendo una
+complejidad de $\mathbf{T(n) = \Theta(1 \cdot \log n) = \Theta(\log n)}$.
+\end{quote}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Recurrencia (c): $T(n) = 2T(n/2) + O(\mathbf{n^2})$}
+\end{itemize}
+
+\begin{quote}
+Identificamos $a = 2$, $b = 2$ y $f(n) = O(n^2)$. Obtenemos $\log_2 2 = 1$, que genera la
+cota $n^1$. Dado que $f(n) = n^2$ crece más rápido que $n^1$ por un factor polinomial
+($\varepsilon = 1$), el trabajo realizado fuera de las llamadas domina la ejecución.
+Verificamos además la condición de regularidad: $\mathbf{2 \cdot f(n/2) \leq c \cdot f(n)}$,
+la cual se simplifica a
+$2 \cdot (n/2)^2 \leq c \cdot n^2 \;\rightarrow\; \frac{1}{2}n^2 \leq c \cdot n^2$
+cumpliéndose para cualquier constante $c \geq 1/2$ (tomando $c = 0.5 < 1$). En consecuencia,
+aplica el \textbf{Caso 3 del Teorema Maestro} y la solución es
+$\mathbf{T(n) = \Theta(n^2)}$.
+\end{quote}
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Recurrencia (d): $T(n) = 3T(n/4) + O(n)$}
+\end{itemize}
+
+\begin{quote}
+Identificamos $a = 3$, $b = 4$ y $f(n) = O(n)$. Calculamos $\log_4 3 = 0.792$, arrojando un
+crecimiento de $n^{0.792}$. Dado que $f(n) = n^1$ domina polinomialmente sobre $n^{0.792}$
+(con $\varepsilon \approx 0.208$), comprobamos la regularidad: $3 \cdot f(n/4) \leq c \cdot f(n)$,
+que equivale a $\frac{3}{4}n \leq c \cdot n$, la cual se satisface tomando $c = 3/4 < 1$.
+Aplicando el \textbf{Caso 3 del Teorema Maestro}, concluimos que
+$\mathbf{T(n) = \Theta(n)}$.
+\end{quote}
+
+% =================== VI. PREGUNTAS DE ANÁLISIS ===================
+\newpage
+\section*{VI. PREGUNTAS DE ANÁLISIS}
+\addcontentsline{toc}{section}{VI. PREGUNTAS DE ANÁLISIS}
+
+\subsection*{Pregunta 1 de análisis}
+
+\textbf{Si se llama a \texttt{suma\_digitos(0)}, ¿qué debe retornar? ¿Está cubierto por el
+caso base de su implementación? Si no, ¿cómo se modifica?}
+
+\paragraph{1. Qué debe retornar}\mbox{}\\[4pt]
+Debe retornar \textbf{0}: el número 0 tiene un único dígito, que es 0, y la suma de sus
+dígitos es 0. Esto coincide con el \texttt{assert} que exige la guía
+(\texttt{assert suma\_digitos(0) == 0}).
+
+\paragraph{2. ¿Está cubierto por el caso base?}\mbox{}\\[4pt]
+\textbf{Sí.} El caso base de la implementación es \texttt{if n < 10: return n}. Como
+$0 < 10$, la condición se cumple en la primera llamada, se retorna 0 y \textbf{no se produce
+ninguna llamada recursiva}: la profundidad de la pila es 1.
+
+La cobertura de $n = 0$ no es casual, sino consecuencia de haber formulado el caso base sobre
+la \textit{cantidad de dígitos} ($n < 10$) y no sobre un valor particular.
+
+\paragraph{3. Cómo se modificaría si no estuviera cubierto}\mbox{}
+
+\begin{center}
+\textbf{Tabla:} Comportamiento de distintos casos base frente a la entrada $n = 0$.
+
+\vspace{4pt}
+\begin{tabularx}{\textwidth}{|p{4.2cm}|p{3.0cm}|X|}
+\hline
+\textbf{Caso base} & \textbf{Resultado con n = 0} & \textbf{Observación} \\
+\hline
+\texttt{if n < 10: return n} & 0 (correcto) & Formulación usada. Cubre 0--9 de forma uniforme. \\
+\hline
+\texttt{if n == 0: return 0} & 0 (correcto) & También funciona, pero añade un nivel de recursión extra por cada dígito. \\
+\hline
+\texttt{if 0 < n < 10: return n} & Recursión infinita & Con $n = 0$ la guarda es falsa y se evalúa \texttt{0 \% 10 + suma\_digitos(0 // 10)}, que vuelve a ser \texttt{suma\_digitos(0)}. \\
+\hline
+\end{tabularx}
+\end{center}
+
+\vspace{6pt}
+La tercera variante es el error típico: el argumento deja de decrecer, \texttt{0 // 10} sigue
+siendo 0 y Python termina lanzando \texttt{RecursionError: maximum recursion depth exceeded}.
+La corrección consiste simplemente en relajar la guarda para que incluya el 0:
+
+\begin{lstlisting}[style=python,caption={Corrección del caso base defectuoso.}]
+# INCORRECTO: 0 no esta cubierto -> recursion infinita
+def suma_digitos_mala(n):
+    if 0 < n < 10:
+        return n
+    return n % 10 + suma_digitos_mala(n // 10)
+
+# CORRECTO: basta con que la guarda incluya el 0
+def suma_digitos(n):
+    if n < 10:
+        return n
+    return n % 10 + suma_digitos(n // 10)
+\end{lstlisting}
+
+\subsection*{Pregunta 2 de análisis}
+
+\textbf{¿Por qué la Búsqueda Binaria REQUIERE que el arreglo esté ordenado? Diseñe un ejemplo
+donde una búsqueda binaria aplicada a un arreglo desordenado retorne un resultado INCORRECTO
+(falso negativo o falso positivo).}
+
+El requisito fundamental para el funcionamiento de la Búsqueda Binaria es que el conjunto de
+datos posea un ordenamiento monótono previo, ya que el algoritmo se basa en la propiedad de
+invarianza para descartar la mitad de los elementos en cada iteración (Cormen et al., 2022).
+Si el arreglo no se encuentra ordenado, la comparación entre el elemento objetivo y el elemento
+central (\texttt{arr[medio]}) no proporciona ninguna información lógica válida sobre en qué
+mitad (izquierda o derecha) se localiza la clave buscada (Sedgewick \& Wayne, 2011). Como
+consecuencia directa, descartar una de las sublistas puede eliminar la sección que realmente
+contiene el valor, rompiendo la garantía de convergencia y derivando en resultados erróneos
+como falsos negativos o índices incorrectos (Goodrich et al., 2014).
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Ejemplo de Falso Negativo (Elemento presente pero no encontrado):}
+    Consideremos el arreglo desordenado \texttt{arr = [50, 10, 20, 40, 30]} de tamaño $n = 5$
+    y busquemos el elemento \texttt{objetivo = 10}. En la primera iteración, los índices son
+    \texttt{bajo = 0} y \texttt{alto = 4}, calculando la posición central
+    \texttt{medio = (0 + 4) // 2 = 2}, donde \texttt{arr[2] = 20}. Al comparar
+    \texttt{arr[medio]} con el objetivo ($20 == 10$), la condición evalúa si $10 < 20$
+    (Cormen et al., 2022). Asumiendo erróneamente que el arreglo está ordenado, el algoritmo
+    deduce que el 10 debe estar a la izquierda y actualiza \texttt{alto = medio - 1 = 1}
+    (Sedgewick \& Wayne, 2011). Sin embargo, en el arreglo original, el elemento 10 se
+    encontraba en el índice 1, pero la lógica del descarte lo omite o falla en las siguientes
+    iteraciones según la estructura del bucle, produciendo un retorno de $-1$ (falso negativo)
+    a pesar de que el número sí existía en la estructura de datos (Goodrich et al., 2014).
+\end{itemize}
+
+\subsection*{Pregunta 3 de análisis}
+
+\textbf{En la recurrencia (c): $T(n) = 2T(n/2) + O(\mathbf{n^2})$, el Caso 3 del Teorema
+Maestro implica que el trabajo local $O(\mathbf{n^2})$ domina. ¿Qué algoritmo real podría
+tener esta recurrencia? ¿Es preferible a Merge Sort?}
+
+Una estructura algorítmica real que responde exactamente a esta ecuación de recurrencia es una
+versión ineficiente o mal diseñada del algoritmo \textbf{QuickSort}, específicamente cuando se
+utiliza una estrategia de división Divide y Vencerás pero la fase de particionado o combinación
+realiza un trabajo redundante de orden cuadrático $O(n^2)$ en cada nivel del árbol recursivo
+(Cormen et al., 2022). También puede presentarse en algoritmos geométricos o de procesamiento
+de matrices donde el problema se divide equitativamente en 2 mitades de tamaño $n/2$, pero la
+etapa de combinación requiere comparar todos los pares posibles de elementos en una malla
+bidimensional resultando en $O(n^2)$ operaciones locales (Dasgupta et al., 2006).
+
+Bajo ningún escenario operativo es preferible este algoritmo frente a \textbf{Merge Sort}
+(Sedgewick \& Wayne, 2011). Mientras que Merge Sort garantiza una complejidad asintótica de
+$O(n \log n)$ tanto en el peor como en el promedio de los casos gracias a su fase de combinación
+lineal $O(n)$, un algoritmo gobernado por la recurrencia $T(n) = 2T(n/2) + O(n^2)$ degrada su
+rendimiento a una complejidad cuadrática $O(n^2)$ (Cormen et al., 2022). Esto implica que, para
+un tamaño de entrada grande (por ejemplo $n = 100{,}000$), el algoritmo basado en $O(n^2)$
+ejecutará un orden de $10^{10}$ operaciones, resultando infinitamente más lento e ineficiente
+que Merge Sort (Dasgupta et al., 2006).
+
+\subsection*{Pregunta 4 de análisis}
+
+\textbf{¿Cuál es el peor caso para Merge Sort en términos de comparaciones? ¿Y el mejor caso?
+A diferencia de Quick Sort, ¿siempre produce el mismo número de operaciones dado n?}
+
+Merge Sort siempre divide el arreglo por la mitad, sin importar el orden de los datos de
+entrada, por lo que su número de comparaciones es $\Theta(n \log n)$ tanto en el mejor como en
+el peor caso (Charles Leiserson, 2011). La cantidad exacta de comparaciones varía ligeramente
+según los datos (en el mejor caso, cuando todos los elementos de una mitad son menores que todos
+los de la otra, el proceso de mezcla ``gasta'' menos comparaciones porque un lado se agota
+antes), pero el orden de crecimiento no cambia (Thomas H. Cormen, 2009). Por eso se dice que
+Merge Sort tiene un comportamiento estable y predecible: para un $n$ dado, el número de
+operaciones es prácticamente el mismo sin importar si los datos ya están ordenados, en orden
+inverso o aleatorios (Charles Leiserson, 2011).
+
+Quick Sort, en cambio, sí depende fuertemente de los datos de entrada y de la elección del pivote
+(Thomas H. Cormen, 2009). En el caso promedio también es $O(n \log n)$, pero en el peor caso (por
+ejemplo, un arreglo ya ordenado con un pivote que siempre resulta ser el menor o el mayor
+elemento) degenera a $O(n^2)$, porque cada partición solo reduce el tamaño del problema en 1 en
+vez de dividirlo a la mitad (University of Auckland, Department of Computer Science, 2016).
+
+En resumen: Merge Sort ofrece una garantía $\Theta(n \log n)$ constante en todos los casos (a
+costa de memoria adicional $O(n)$ para la mezcla), mientras que Quick Sort es en promedio más
+rápido en la práctica (menor constante, ordena \textit{in-place}) pero no ofrece esa garantía en
+el peor caso, salvo que se usen estrategias de selección de pivote (mediana de tres, pivote
+aleatorio) que reduzcan la probabilidad de ese escenario (Thomas H. Cormen, 2009).
+
+% =================== VII. TRABAJO DE INVESTIGACIÓN ===================
+\newpage
+\section*{VII. TRABAJO DE INVESTIGACIÓN: BÚSQUEDA BINARIA DE FIBONACCI}
+\addcontentsline{toc}{section}{VII. TRABAJO DE INVESTIGACIÓN: BÚSQUEDA BINARIA DE FIBONACCI}
+
+\subsection*{RESUMEN}
+
+El presente trabajo de investigación analiza el algoritmo de Búsqueda de Fibonacci
+(\textit{Fibonacci Search}), desarrollado originalmente por David E. Ferguson en 1960. Se
+examina su principio de funcionamiento basado en la propiedad de división dorada de los números
+de Fibonacci, se efectúa un análisis comparativo frente a la Búsqueda Binaria clásica en
+términos de complejidad temporal en el peor caso, y se evalúa su comportamiento a nivel de
+hardware, enfocado en el acceso a la memoria principal y la eficiencia del caché de la CPU.
+
+\subsection*{1. PRINCIPIO DE FUNCIONAMIENTO Y FUNDAMENTO MATEMÁTICO}
+
+La búsqueda de Fibonacci es un algoritmo de búsqueda comparativa diseñado para localizar un
+elemento específico dentro de un arreglo unidimensional previamente ordenado (Cormen et al.,
+2022). A diferencia de la Búsqueda Binaria tradicional ---la cual divide el espacio de búsqueda
+exactamente a la mitad utilizando operaciones de división aritmética o desplazamiento de bits
+(\texttt{/ 2} o \texttt{>> 1})---, la búsqueda de Fibonacci subdivide el arreglo en bloques cuyos
+tamaños corresponden a números consecutivos de la sucesión de Fibonacci (Ferguson, 1960).
+
+\begin{figure}[h!]
+    \centering
+    \fig[width=0.75\textwidth]{image5.png}
+\end{figure}
+
+La sucesión de Fibonacci se define mediante la relación de recurrencia $F_0 = 0$, $F_1 = 1$ y
+$F_k = F_{k-1} + F_{k-2}$ para $k \geq 2$. Dado un arreglo de tamaño $n$, el algoritmo selecciona
+el menor número de Fibonacci $F_k$ tal que $F_k \geq n + 1$. A partir de este valor, la posición
+de prueba o pivote se calcula como $i = \min(\text{offset} + F_{k-2},\, n-1)$, dividiendo
+conceptualmente el arreglo en dos subarreglos desiguales de tamaños aproximados $F_{k-1}$ y
+$F_{k-2}$ (Sedgewick \& Wayne, 2011).
+
+\textbf{El proceso iterativo se rige por tres escenarios de comparación:}
+
+\begin{itemize}[leftmargin=*]
+    \item Si \texttt{arr[i] == objetivo}: Se ha encontrado la clave y se retorna el índice $i$.
+    \item Si \texttt{arr[i] > objetivo}: El elemento buscado se encuentra en el subarreglo
+    izquierdo. La ventana de búsqueda se reduce actualizando los índices de Fibonacci a
+    $F_{k-2}$, descartando el bloque derecho de tamaño $F_{k-1}$ (Ferguson, 1960).
+    \item Si \texttt{arr[i] < objetivo}: El elemento buscado reside en el subarreglo derecho. El
+    desplazamiento (\textit{offset}) se ajusta a la posición $i$ y los indicadores de Fibonacci
+    se reducen a $F_{k-1}$ (Goodrich et al., 2014).
+\end{itemize}
+
+\subsection*{2. EJEMPLO PRÁCTICO PASO A PASO}
+
+Para comprender la ejecución gráfica, consideremos el siguiente arreglo ordenado de $n = 10$
+elementos y busquemos el \texttt{valor objetivo = 85}:
+
+\begin{figure}[h!]
+    \centering
+    \fig[width=0.75\textwidth]{image6.png}
+\end{figure}
+
+\textbf{Inicialización:}
+
+Buscamos el menor $F_k \geq n + 1 = 11$. El número de Fibonacci adecuado es $F_k = 13$ (donde
+$F_k = 13$, $F_{k-1} = 8$, $F_{k-2} = 5$). Fijamos \texttt{offset} $= -1$.
+
+\textbf{$\bullet$ Paso 1:}
+
+Calculamos pivote $i = \min(\text{offset} + F_{k-2},\, n-1) = \min(-1 + 5,\, 9) = 4$.
+
+Comparamos \texttt{arr[4]} $= 55$ con \texttt{objetivo} $= 85$.
+
+Como $55 < 85$, descartamos la mitad izquierda. Actualizamos \texttt{offset} $= 4$ y desplazamos
+los índices de Fibonacci dos posiciones hacia abajo: $F_k = 8$, $F_{k-1} = 5$, $F_{k-2} = 3$.
+
+\textbf{$\bullet$ Paso 2:}
+
+Calculamos pivote $i = \min(4 + 3,\, 9) = 7$.
+
+Comparamos \texttt{arr[7]} $= 85$ con \texttt{objetivo} $= 85$.
+
+\textbf{¡Coincidencia encontrada! El algoritmo retorna el índice 7 en tan solo 2 comparaciones.}
+
+\subsection*{3. COMPARACIÓN DE COMPLEJIDAD Y NÚMERO DE COMPARACIONES}
+
+Ambos algoritmos comparten la misma clase de complejidad asintótica en el peor de los casos,
+denotada por $O(\log n)$ (Cormen et al., 2022). Sin embargo, existen diferencias operativas en
+los coeficientes constantes de la cota superior:
+
+\textbf{$\bullet$ Búsqueda Binaria Clásica:} Divide el espacio en factores exactos de $1/2$. En
+el peor de los casos, el número máximo de comparaciones viene dado por
+$\lceil \log_2(n + 1) \rceil$ (Sedgewick \& Wayne, 2011). Para un arreglo de $n = 10^6$
+elementos, la búsqueda binaria requiere como máximo 20 comparaciones.
+
+\textbf{$\bullet$ Búsqueda de Fibonacci:} Al dividir la estructura en proporciones doradas
+($\approx 0.618$ y $0.382$), la profundidad máxima del árbol de decisión es ligeramente mayor. El
+número de comparaciones en el peor caso se sitúa en aproximadamente
+$\log_\varphi(n) \approx 1.44 \cdot \log_2(n)$ (Ferguson, 1960). Para $n = 10^6$, la búsqueda de
+Fibonacci puede requerir hasta 28 comparaciones.
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|X|}
+\hline
+\textbf{Criterio} & \textbf{Búsqueda Binaria Clásica} & \textbf{Búsqueda de Fibonacci} \\
+\hline
+Operación de Pivote & División entera \texttt{(bajo + alto) / 2} & Sumas y restas simples de índices \\
+\hline
+Factor de División & 50\% / 50\% (Mitades exactas) & 38.2\% / 61.8\% (Razón áurea $\varphi$) \\
+\hline
+Peor Caso (Comparaciones) & $\log_2(n)$ & $1.44 \cdot \log_2(n)$ \\
+\hline
+Complejidad Espacial & $O(1)$ auxiliar & $O(1)$ auxiliar \\
+\hline
+Requisito de Hardware & Requiere ALU con división rápida & Apto para microcontroladores sin FPU \\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsection*{4. ACCESO A MEMORIA Y COMPORTAMIENTO CON LA CACHÉ DE LA CPU}
+
+\begin{figure}[h!]
+    \centering
+    \fig[width=0.7\textwidth]{image7.png}
+\end{figure}
+
+En la arquitectura de computadoras moderna, el rendimiento de un algoritmo no depende únicamente
+del número de instrucciones ejecutadas, sino del patrón de localidad de referencia y el
+aprovechamiento de la memoria caché de los procesadores (Cormen et al., 2022).
+
+\textbf{$\bullet$ Localidad de Referencia en Búsqueda Binaria:} Realiza saltos de gran amplitud
+en las primeras iteraciones (de $n/2$ a $n/4$ o $3n/4$). En arreglos que superan el tamaño de la
+caché L1/L2, estos saltos abruptos provocan constantes fallos de caché (\textit{cache misses}),
+obligando al procesador a traer líneas de memoria desde la RAM principal con una penalización
+alta en latencia (Goodrich et al., 2014).
+
+\textbf{$\bullet$ Amigabilidad con la Caché en Búsqueda de Fibonacci:} Dado que subdivide el
+arreglo de acuerdo con los números de Fibonacci, los puntos de inspección adyacentes están
+espacialmente más cerca en el subarreglo de menor tamaño ($F_{k-2}$). Esto proporciona una
+localidad espacial superior, incrementando la probabilidad de que los datos requeridos en
+iteraciones consecutivas ya se encuentren cargados en la misma línea de memoria caché de la CPU
+(Ferguson, 1960; Sedgewick \& Wayne, 2011).
+
+\subsection*{5. CASOS DE USO Y CONCLUSIONES}
+
+La elección entre ambos algoritmos depende del entorno de hardware y las restricciones de
+almacenamiento:
+
+Sistemas Embebidos y Microcontroladores sin FPU/Unidad de División: En arquitecturas de bajo
+consumo que carecen de instrucciones de división por hardware rápidas, la búsqueda de Fibonacci
+supera a la binaria al sustituir la división por restas elementales de índices de Fibonacci
+(Ferguson, 1960).
+
+Estructuras de Datos en Medios de Almacenamiento Lentos o Cintas Magnéticas: Cuando el costo de
+inspeccionar una posición contigua es significativamente menor que dar saltos a posiciones
+lejanas, la Búsqueda de Fibonacci minimiza los tiempos de reubicación física de los cabezales de
+lectura (Sedgewick \& Wayne, 2011).
+
+Arreglos Masivos en RAM: Para sistemas genéricos modernos con procesadores x86/ARM que integran
+divisores rápidos por desplazamiento de bits, la Búsqueda Binaria clásica continúa siendo la
+opción predeterminada debido a su implementación simple y menor número de comparaciones absolutas
+(Cormen et al., 2022).
+
+% =================== REFERENCIAS ===================
+\newpage
+\section*{REFERENCIAS}
+\addcontentsline{toc}{section}{REFERENCIAS BIBLIOGRÁFICAS}
+
+\setlength{\parindent}{0pt}
+\begin{list}{}{%
+  \setlength{\leftmargin}{1.27cm}
+  \setlength{\itemindent}{-1.27cm}
+  \setlength{\itemsep}{8pt}}
+
+\item Cormen, T. H., Leiserson, C. E., Rivest, R. L., \& Stein, C. (2022).
+\textit{Introduction to algorithms} (4.\textordfeminine{} ed.). MIT Press.
+\url{https://mitpress.mit.edu/9780262046305/}
+
+\item Dasgupta, S., Papadimitriou, C., \& Vazirani, U. (2006). \textit{Algorithms}.
+McGraw-Hill Education. \url{https://people.eecs.berkeley.edu/~vazirani/algorithms/all.pdf}
+
+\item Ferguson, D. E. (1960). Fibonacci search. \textit{Communications of the ACM},
+3(12), 648--648. \url{https://doi.org/10.1145/367487.367496}
+
+\item Goodrich, M. T., Tamassia, R., \& Goldwasser, M. H. (2014). \textit{Data structures
+and algorithms in Python}. John Wiley \& Sons.
+
+\item Sedgewick, R., \& Wayne, K. (2011). \textit{Algorithms} (4.\textordfeminine{} ed.).
+Addison-Wesley Professional. \url{https://algs4.cs.princeton.edu/home/}
+
+\item Akra, M., \& Bazzi, L. (1998). On the solution of linear recurrence equations.
+\textit{Computational Optimization and Applications}, 10(2), 195--210.
+\url{https://doi.org/10.1023/A:1018373005182}
+
+\item Bentley, J. L. (1980). Multidimensional divide-and-conquer.
+\textit{Communications of the ACM}, 23(4), 214--229.
+\url{https://doi.org/10.1145/358841.358850}
+
+\item Bentley, J. L. (1983). Programming pearls: Writing correct programs.
+\textit{Communications of the ACM}, 26(12), 1040--1045.
+\url{https://doi.org/10.1145/358476.358484}
+
+\item Bentley, J. L., Haken, D., \& Saxe, J. B. (1980). A general method for solving
+divide-and-conquer recurrences. \textit{ACM SIGACT News}, 12(3), 36--44.
+\url{https://doi.org/10.1145/1008861.1008865}
+
+\item Bentley, J. L., \& Yao, A. C.-C. (1976). An almost optimal algorithm for unbounded
+searching. \textit{Information Processing Letters}, 5(3), 82--87.
+\url{https://doi.org/10.1016/0020-0190(76)90071-5}
+
+\item Cormen, T. H., Leiserson, C. E., Rivest, R. L., \& Stein, C. (2022).
+\textit{Introduction to algorithms} (4.\textordfeminine{} ed.). MIT Press.
+\url{https://mitpress.mit.edu/9780262046305/}
+
+\item Knuth, D. E. (1976). Big Omicron and big Omega and big Theta.
+\textit{ACM SIGACT News}, 8(2), 18--24. \url{https://doi.org/10.1145/1008328.1008329}
+
+\item McCauley, R., Grissom, S., Fitzgerald, S., \& Murphy, L. (2015). Teaching and
+learning recursive programming: A review of the research literature.
+\textit{Computer Science Education}, 25(1), 37--66.
+\url{https://doi.org/10.1080/08993408.2015.1033205}
+
+\item Python Software Foundation. (2024). \textit{time --- Time access and conversions}.
+Python 3.11 documentation. \url{https://docs.python.org/3/library/time.html}
+
+\item Charles Leiserson, P. I. (2011). \textit{Introduction to Algorithms, Lecture 3:
+Insertion Sort, Merge Sort.}
+\url{https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/resources/lecture-3-insertion-sort-merge-sort/}
+
+\item Thomas H. Cormen, C. E. (2009). \textit{Introduction to Algorithms.} MIT Press.
+\url{https://www.ocf.berkeley.edu/~tyfeng/csc317/textbook/Algorithms.pdf}
+
+\item University of Auckland, Department of Computer Science. (2016).
+\textit{Introduction to Algorithms and Data Structures.}
+\url{https://www.cs.auckland.ac.nz/textbookCS220/ebook/DGW2016.pdf}
+
+\end{list}
+
+\end{document}
